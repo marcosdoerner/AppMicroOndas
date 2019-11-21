@@ -1,0 +1,5 @@
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Entidades\bin\Debug\AppMicroOndas.Entidades.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Entidades\bin\Debug\AppMicroOndas.Entidades.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Entidades\obj\Debug\AppMicroOndas.Entidades.csprojAssemblyReference.cache
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Entidades\obj\Debug\AppMicroOndas.Entidades.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Entidades\obj\Debug\AppMicroOndas.Entidades.pdb

@@ -1,0 +1,10 @@
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\bin\Debug\AppMicroOndas.Negocio.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\bin\Debug\AppMicroOndas.Negocio.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\bin\Debug\AppMicroOndas.Entidades.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\bin\Debug\AppMicroOndas.Entidades.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\obj\Debug\AppMicroOndas.Negocio.csprojAssemblyReference.cache
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\obj\Debug\AppMicroOndas.Negocio.csproj.CopyComplete
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\obj\Debug\AppMicroOndas.Negocio.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\obj\Debug\AppMicroOndas.Negocio.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\bin\Debug\AppMicroOndas.Data.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Negocio\bin\Debug\AppMicroOndas.Data.pdb

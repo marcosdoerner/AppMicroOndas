@@ -46,24 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dominio\AquecimentoNegocio.cs" />
-    <Compile Include="Dominio\MicroOndasNegocio.cs" />
-    <Compile Include="DTO\ProgramaAquecimentoDTO.cs" />
     <Compile Include="Enums\PadraoEnum.cs" />
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMicroOndas.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormMicroOndas.Designer.cs">
       <DependentUpon>FormMicroOndas.cs</DependentUpon>
     </Compile>
-    <Compile Include="FuncionalidadesMicroOndas.cs" />
-    <Compile Include="Interface\IFuncionalidades.cs" />
-    <Compile Include="DTO\MicroOndasDTO.cs" />
-    <Compile Include="Interface\IMicroOndas.cs" />
-    <Compile Include="Interface\IProgramaAquecimento.cs" />
-    <Compile Include="Model\MicroOndasModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMicroOndas.resx">
       <DependentUpon>FormMicroOndas.cs</DependentUpon>
     </EmbeddedResource>
@@ -88,6 +88,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppMicroOndas.Entidades\AppMicroOndas.Entidades.csproj">
+      <Project>{A70297C7-BCBC-4707-B3A7-C3CB768ECC5B}</Project>
+      <Name>AppMicroOndas.Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AppMicroOndas.Negocio\AppMicroOndas.Negocio.csproj">
+      <Project>{8A74F84C-EC44-47C0-AE55-8319A21C218F}</Project>
+      <Name>AppMicroOndas.Negocio</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

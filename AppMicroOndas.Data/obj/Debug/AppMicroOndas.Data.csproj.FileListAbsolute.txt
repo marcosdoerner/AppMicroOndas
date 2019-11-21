@@ -1,0 +1,8 @@
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\bin\Debug\AppMicroOndas.Data.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\bin\Debug\AppMicroOndas.Data.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\obj\Debug\AppMicroOndas.Data.csprojAssemblyReference.cache
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\obj\Debug\AppMicroOndas.Data.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\obj\Debug\AppMicroOndas.Data.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\bin\Debug\AppMicroOndas.Entidades.dll
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\bin\Debug\AppMicroOndas.Entidades.pdb
+D:\Repositorio\GitHub\AppMicroOndas\AppMicroOndas.Data\obj\Debug\AppMicroOndas.Data.csproj.CopyComplete

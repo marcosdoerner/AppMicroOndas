@@ -1,113 +1,55 @@
-﻿using AppMicroOndas.DTO;
+﻿using AppMicroOndas.Entidades.Modelos;
 using AppMicroOndas.Enums;
-using AppMicroOndas.Interface;
+using AppMicroOndas.Negocio.Interface;
+using AppMicroOndas.Negocio.Services;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AppMicroOndas
 {
     public partial class FormMicroOndas : Form
     {
-        int tempoExecucao;
-        private IFuncionalidades _funcionalidades;
-        private IList<ProgramaAquecimentoDTO> listaAquecimentos;
-        bool carga;
+
+        private readonly IMicroOndasService _microOndasService;
+        private readonly IProgramaAquecimentoService _programaService;
+            
         public FormMicroOndas()
         {
             InitializeComponent();
-
-            InicializarMicroondas();
-        }
-
-        private void InicializarMicroondas()
-        {
-            _funcionalidades = new FuncionalidadesMicroOndas();
-
-            LimparDados();
-            CriarListaProgramasAquecimento();
-        }
-
-        private void CriarListaProgramasAquecimento()
-        {
-            carga = true;
-            var listaAquecimentos = _funcionalidades.ListarProgramasAquecimento().ToList();
-            cmbPrograma.DataSource = null;
-            cmbPrograma.DataSource = listaAquecimentos;
-            cmbPrograma.ValueMember = "Id";
-            cmbPrograma.DisplayMember = "Nome";
-            cmbPrograma.SelectedIndex = -1;
-            carga = false;
-
+            _microOndasService = new MicroOndasService();
+            _microOndasService = new MicroOndasService(txtMonitor);
+            _programaService = new ProgramaAquecimentoService();
+            _microOndasService.ConcluidoEvent += _microOndasService_ConcluidoEvent;
+            _microOndasService.ErroEvent += _microOndasService_ErroEvent;
+            btnVerTodos_Click(null, null);
         }
 
         private void button_ligar_Click(object sender, EventArgs e)
         {
-            int tempo;
-            int potencia;
-
-            if (string.IsNullOrEmpty(txtPrato.Text))
-            {
-                lblMensagem.Text = "É obrigatório o preenchimento do prato.";
-                return;
-            }
-
-                
-
-            if (!int.TryParse(txtTempo.Text, out tempo))
-            {
-                lblMensagem.Text = "É obrigatório o preenchimento do campo Tempo.";
-                return;
-            }
-
-            if (!int.TryParse(txtPotencia.Text, out potencia))
-            {
-                lblMensagem.Text = "É obrigatório o preenchimento do campo Potência.";
-                return;
-            }
-
-            var iniciarMicroOndas = _funcionalidades.IniciarMicroOndas(tempo, potencia, txtPrato.Text );
-
-            if (iniciarMicroOndas.Valido)
-            {
-                IniciarCronometro(iniciarMicroOndas.Tempo);
-            }
-            else 
-            {
-                lblMensagem.Text = iniciarMicroOndas.Mensagem;
-            }
+            Iniciar();
         }
 
-        private void IniciarCronometro(int tempo)
+        private void Iniciar(string caracter = ".", ProgramaAquecimentoModel programa = null)
         {
-            tempoExecucao = tempo;
-            lblPonto.Text = txtPrato.Text;
-            cronometro.Start();
-        }
-
-        private void cronometro_Tick(object sender, EventArgs e)
-        {
-            tempoExecucao--;
-
-            lblMensagem.Text = Convert.ToString(tempoExecucao);
-            lblPonto.Visible = true;
-
-            var potencia = Convert.ToInt16(txtPotencia.Text);
-            var pontoIncremento = new string('.', potencia);
-
-            lblPonto.Text += pontoIncremento;
-
-            if (tempoExecucao == 0)
+            try
             {
-                cronometro.Stop();
-                MessageBox.Show("Aquecida.");
-                LimparDados();
+                var microondas = new MicroOndasModel()
+                {
+                    Prato = txtPrato.Text,
+                    TempoTxt = txtTempo.Text,
+                    PotenciaTxt = txtPotencia.Text,
+                    Caracter = caracter
+                };
+
+                if (programa != null)
+                    _programaService.ValidaCompativel(microondas, programa);
+
+                _microOndasService.Inicia(microondas);
+
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -115,40 +57,131 @@ namespace AppMicroOndas
         {
             txtTempo.Text = string.Empty;
             txtPotencia.Text = ((int)PadraoEnum.PotenciaPadrao).ToString();
-            lblMensagem.Text = string.Empty;
-            lblPonto.Text = string.Empty;
-            tempoExecucao = 0;
-
         }
 
         private void InicioRapido(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtPrato.Text))
+            txtPotencia.Text = ((int)PadraoEnum.InicioRapidoPodencia).ToString();
+            txtTempo.Text  = ((int)PadraoEnum.InicioRapidoTempo).ToString();
+            Iniciar();
+        }
+
+        private void _microOndasService_ErroEvent(object sender, EventArgs e)
+        {
+            MessageBox.Show(sender.ToString());
+        }
+
+        private void _microOndasService_ConcluidoEvent(object sender, EventArgs e)
+        {
+            var result = _microOndasService.BuscaResultado();
+            _microOndasService.SetaResultado(result + sender.ToString());
+        }
+
+        private void button_pausar_Click(object sender, EventArgs e)
+        {
+            _microOndasService.Pausa();
+        }
+
+        private void button_cancelar_Click(object sender, EventArgs e)
+        {
+            _microOndasService.Cancela();
+        }
+
+        private void btnVerTodos_Click(object sender, EventArgs e)
+        {
+            var lista = _programaService.BuscaTodos();
+            dgProgramas.DataSource = lista;
+        }
+
+        private void btnFiltrarCompativeis_Click(object sender, EventArgs e)
+        {
+            try
             {
-                lblMensagem.Text = "É obrigatório o preenchimento do prato.";
+                var lista = _programaService.BuscaCompativel(new MicroOndasModel()
+                {
+                    Prato = txtPrato.Text
+                });
+
+                dgProgramas.DataSource = lista;
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        private void btnCustomAdd_Click(object sender, EventArgs e)
+        {
+            if (dgProgramas.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecione um programa na lista abaixo.");
                 return;
             }
 
-            var inicioRapido = _funcionalidades.InicioRapido(txtPrato.Text);
+            var item = (ProgramaAquecimentoModel)dgProgramas.SelectedRows[0].DataBoundItem;
 
-            txtTempo.Text = inicioRapido.Tempo.ToString();
-            txtPotencia.Text = inicioRapido.Potencia.ToString();
-
-            IniciarCronometro(inicioRapido.Tempo);
+            var form = Application.OpenForms["FormEstender"];
+            if (form != null)
+                form.BringToFront();
+            else
+            {
+                FormEstender formEstender = new FormEstender(item);
+                formEstender.EstenderEvent += FormEstender_EstenderEvent;
+                formEstender.Show();
+            }
 
         }
 
-        private void cmbPrograma_SelectedIndexChanged(object sender, EventArgs e)
+        private void FormEstender_EstenderEvent(object sender, EventArgs e)
         {
-            if (!carga && cmbPrograma.SelectedIndex != -1)
+            try
             {
-                var idPrograma = cmbPrograma.SelectedValue;
-                var programa = _funcionalidades.BuscarProgramaAquecimento(Guid.Parse(idPrograma.ToString()));
-
-                txtPotencia.Text = programa.Potencia.ToString();
-                txtPrato.Text = programa.Nome;
-                txtTempo.Text = programa.Tempo.ToString();
+                var programa = (ProgramaAquecimentoModel)sender;
+                _programaService.AdicionaCustomizado(programa);
+                btnVerTodos_Click(null, null);
             }
+            catch (Exception error)
+            {
+
+                MessageBox.Show(error.Message);
+            }
+        }
+
+
+        private void btnIniciarPrograma_Click(object sender, EventArgs e)
+        {
+            if (dgProgramas.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecione um programa na lista abaixo.");
+                return;
+            }
+
+            var item = (ProgramaAquecimentoModel)dgProgramas.SelectedRows[0].DataBoundItem;
+
+            txtTempo.Text = item.Tempo.ToString();
+            txtPotencia.Text = item.Potencia.ToString();
+            Iniciar(item.Caracter, item);
+
+        }
+
+        private void btnCustomDel_Click(object sender, EventArgs e)
+        {
+            if (dgProgramas.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecione um programa na lista abaixo.");
+                return;
+            }
+
+            var item = (ProgramaAquecimentoModel)dgProgramas.SelectedRows[0].DataBoundItem;
+
+            if (!item.Estendido)
+            {
+                MessageBox.Show("Selecione um programa na lista abaixo.");
+                return;
+            }
+
+            _programaService.DeletaCustomizado(item);
+            btnVerTodos_Click(null, null);
         }
     }
 }
